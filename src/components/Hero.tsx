@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useTypewriter } from '../hooks/useTypewriter';
 
-const WHITE_PILLS = [
-  'Pitch us an idea',
-  'Come work here',
-  'Send a brief hello',
-  'See how we operate',
+const ACTION_PILLS = [
+  { label: "Craft I'm proud of", href: '#craft' },
+  { label: 'Skills & Tools', href: '#skills' },
+  { label: 'About Me', href: '#about' },
+  { label: 'Testimonials', href: '#testimonials' },
 ];
 
 const TYPEWRITER_TEXT =
-  'Glad you stopped in. Good taste tends to find us. Now, what are we building?';
+  "Glad you stopped in. I design clear, user-first experiences that don't confuse people. Now, what are we building?";
 
 export const Hero: React.FC = () => {
-  const { displayed, done } = useTypewriter(TYPEWRITER_TEXT, 38, 600);
+  const { displayed, done } = useTypewriter(TYPEWRITER_TEXT, 32, 500);
   const [showPills, setShowPills] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -23,9 +23,10 @@ export const Hero: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCopyEmail = async () => {
+  const handleCopyEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
-      await navigator.clipboard.writeText('hello@mainframe.co');
+      await navigator.clipboard.writeText('veerajputji@gmail.com');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -33,9 +34,20 @@ export const Hero: React.FC = () => {
     }
   };
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="relative z-[1] w-full h-screen flex flex-col justify-end pb-12 md:justify-center md:pb-0 px-5 sm:px-8 md:px-10 overflow-hidden">
-      <div className="max-w-xl relative z-10">
+    <section
+      id="hero"
+      className="relative z-[1] w-full min-h-screen flex flex-col justify-end pb-16 md:justify-center md:pb-0 px-5 sm:px-8 md:px-12 overflow-hidden"
+    >
+      <div className="max-w-2xl relative z-10">
         {/* 1. Blurred intro label */}
         <div
           className="pointer-events-none select-none mb-5 sm:mb-6"
@@ -44,22 +56,21 @@ export const Hero: React.FC = () => {
             lineHeight: 1.3,
             fontWeight: 400,
             color: '#000',
-            filter: 'blur(4px)',
+            filter: 'blur(3.5px)',
           }}
         >
-          Hey there, meet A.R.I.A,
+          Hey there, I'm Veer,
           <br />
-          Mainframe's Adaptive Response Interface Agent
+          A Delhi-based Product Designer crafting user-first experiences
         </div>
 
         {/* 2. Typewriter text */}
         <p
-          className="text-black mb-5 sm:mb-6"
+          className="text-black mb-6 sm:mb-8 font-normal"
           style={{
-            fontSize: 'clamp(18px, 4vw, 26px)',
+            fontSize: 'clamp(20px, 4.2vw, 28px)',
             lineHeight: 1.35,
-            fontWeight: 400,
-            minHeight: '54px',
+            minHeight: '60px',
           }}
         >
           {displayed}
@@ -73,38 +84,39 @@ export const Hero: React.FC = () => {
 
         {/* 3. Action pill buttons */}
         <div
-          className={`flex flex-wrap gap-y-1 transition-all ${
+          className={`flex flex-wrap items-center gap-y-2 transition-all ${
             showPills ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[8px]'
           }`}
           style={{
             transition: 'opacity 0.4s ease, transform 0.4s ease',
           }}
         >
-          {WHITE_PILLS.map((pill) => (
-            <button
-              key={pill}
-              type="button"
-              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer"
+          {ACTION_PILLS.map((pill) => (
+            <a
+              key={pill.label}
+              href={pill.href}
+              onClick={(e) => scrollToSection(e, pill.href)}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.35em] mx-[0.2em] mb-[0.4em] whitespace-nowrap shadow-sm hover:bg-black hover:text-white transition-all duration-200 cursor-pointer"
             >
-              {pill}
-            </button>
+              {pill.label}
+            </a>
           ))}
 
-          {/* 1 outline pill button */}
+          {/* 1 outline email pill button */}
           <button
             type="button"
             onClick={handleCopyEmail}
             title={copied ? 'Copied to clipboard!' : 'Copy email address'}
-            className="relative inline-flex items-center justify-center text-white bg-transparent border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer group"
+            className="relative inline-flex items-center justify-center text-white bg-black/80 backdrop-blur-sm border border-black/20 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.35em] mx-[0.2em] mb-[0.4em] whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black hover:border-black/20 transition-all duration-200 cursor-pointer shadow-sm group"
           >
             <span>
               Reach us:{' '}
               <span className="underline underline-offset-1">
-                hello@mainframe.co
+                veerajputji@gmail.com
               </span>
             </span>
 
-            {/* 12x12 copy icon of two overlapping rectangles */}
+            {/* 12x12 copy icon */}
             <svg
               width="12"
               height="12"
@@ -113,7 +125,6 @@ export const Hero: React.FC = () => {
               xmlns="http://www.w3.org/2000/svg"
               className="shrink-0 transition-colors"
             >
-              {/* Back rectangle */}
               <rect
                 x="3.25"
                 y="1.25"
@@ -123,7 +134,6 @@ export const Hero: React.FC = () => {
                 stroke="currentColor"
                 strokeWidth="1.2"
               />
-              {/* Front rectangle */}
               <rect
                 x="1.25"
                 y="3.25"
@@ -138,12 +148,36 @@ export const Hero: React.FC = () => {
 
             {/* Subtle Copied Toast Tooltip */}
             {copied && (
-              <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[11px] px-2 py-0.5 rounded shadow pointer-events-none">
-                Copied!
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[11px] px-2.5 py-0.5 rounded shadow pointer-events-none whitespace-nowrap">
+                Copied to clipboard!
               </span>
             )}
           </button>
         </div>
+      </div>
+
+      {/* Subtle indicator to scroll down to Craft */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-40 hover:opacity-100 transition-opacity">
+        <a
+          href="#craft"
+          onClick={(e) => scrollToSection(e, '#craft')}
+          className="flex flex-col items-center gap-1 text-[11px] tracking-widest uppercase text-black font-medium"
+        >
+          <span>Scroll to Craft</span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="animate-bounce"
+          >
+            <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+          </svg>
+        </a>
       </div>
     </section>
   );
